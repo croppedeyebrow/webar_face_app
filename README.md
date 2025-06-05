@@ -113,12 +113,17 @@ React 기반으로 웹 브라우저에서 실시간 얼굴을 감지하고, 얼�
 
 git clone https://github.com/croppedeyebrow/webar_face_app.git
 cd webar_face_app
-```
 
-2. 패키지지 설치
+
+2. 패키지 설치
 
 yarn install
 
-```
 
+3. 개발 서버 실행
+
+yarn dev
+
+
+### 추후 배포 : Vercel?
 ```
