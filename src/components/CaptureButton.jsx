@@ -2,57 +2,64 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const Button = styled.button`
-  background-color: #ff5252;
-  color: white;
+  background-color: #4caf50;
   border: none;
-  border-radius: 50px;
-  padding: 1rem 2rem;
-  font-size: 1rem;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  border-radius: 6px;
   cursor: pointer;
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #45a049;
+  }
+
+  &:disabled {
+    background-color: #9e9e9e;
+    cursor: not-allowed;
+  }
 `;
 
-const Countdown = styled.div`
-  position: absolute;
-  bottom: 5.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2rem;
-  color: white;
-  font-weight: bold;
-  z-index: 10;
+const TimerText = styled.div`
+  margin-top: 8px;
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
 `;
 
 const CaptureButton = ({ onCapture }) => {
   const [countdown, setCountdown] = useState(null);
 
   useEffect(() => {
-    let timer;
+    let timerId;
+
     if (countdown !== null && countdown > 0) {
-      timer = setTimeout(() => {
-        setCountdown((prev) => prev - 1);
+      timerId = setTimeout(() => {
+        setCountdown(countdown - 1);
       }, 1000);
     } else if (countdown === 0) {
-      onCapture(); // 부모에게 캡처 트리거 신호 전달
-      setCountdown(null); // 초기화
+      onCapture();
+      setCountdown(null);
     }
-    return () => clearTimeout(timer);
+
+    return () => clearTimeout(timerId);
   }, [countdown, onCapture]);
 
   const handleClick = () => {
-    setCountdown(10); // 10초 타이머 시작
+    if (countdown === null) {
+      setCountdown(10); // 10초 타이머 시작
+    }
   };
 
   return (
     <>
-      {countdown !== null && <Countdown>{countdown}</Countdown>}
-      <Button onClick={handleClick}>
-        {countdown === null ? "📸 캡처 시작" : "⏱ 진행 중..."}
+      <Button onClick={handleClick} disabled={countdown !== null}>
+        {countdown === null ? "Capture in 10s" : `Capturing in ${countdown}s`}
       </Button>
+      {countdown !== null && (
+        <TimerText>사진이 {countdown}초 후에 캡처됩니다.</TimerText>
+      )}
     </>
   );
 };
